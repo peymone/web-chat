@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/github/downloads/peymone/rest-auth/total?style=social&logo=github" alt="downloads">
-    <img src="https://img.shields.io/github/watchers/peymone/rest-auth" alt="watchers">
-    <img src="https://img.shields.io/github/stars/peymone/rest-auth" alt="stars">
+    <img src="https://img.shields.io/github/downloads/peymone/web-chat/total?style=social&logo=github" alt="downloads">
+    <img src="https://img.shields.io/github/watchers/peymone/web-chat" alt="watchers">
+    <img src="https://img.shields.io/github/stars/peymone/web-chat" alt="stars">
 </p>
 
 <h2>About</h2>
