@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+
+<body>
+
+    <h1>Register</h1>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <p> {{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {{ form.email.label }}: {{ form.email() }} {% for error in form.email.errors %}{{ error }}{% endfor %}
+        {{ form.password.label }}: {{ form.password() }}{% for error in form.password.errors %}{{ error }}{% endfor %}
+        {{ form.confirm.label }}: {{ form.confirm() }}{% for error in form.confirm.errors %}{{ error }}{% endfor %}
+        {{ form.full_name.label }}: {{ form.full_name() }}{% for error in form.full_name.errors %}{{ error }}{% endfor%}
+        {{ form.department.label }}: {{ form.department() }}{% for error in form.department.errors %}{{ error }}{%endfor%}
+        {{ form.department_role.label }}: {{ form.department_role() }}{% for error in form.department_role.errors %}{{error }}{% endfor %}
+        {{ form.submit() }}
+    </form>
+
+    <p><a href="{{url_for('auth.login')}}">Already have an account? Login here</a></p>
+
+</body>
+
+</html>
