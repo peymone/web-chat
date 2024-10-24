@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms</title>
+</head>
+
+<body>
+
+    <h1>Choose chat room</h1>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <p> {{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {{ form.room.label }}: {{ form.room() }} {% for error in form.room.errors %}{{ error }}{% endfor %}
+        {{ form.password.label }}: {{ form.password() }}{% for error in form.password.errors %}{{ error }}{% endfor %}
+        {{ form.submit() }}
+    </form>
+
+    <br>
+    <h1>Available chat rooms:</h1>
+    <ul>
+        {% for room in rooms%}
+        <li>{{ room.name}} - {{ room.description}}. ID: {{ room.id}}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>
