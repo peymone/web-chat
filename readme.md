@@ -27,7 +27,7 @@ _P.S. If you find a bag... and you will find it. Know, I don't care_
 
 - _**Clone repo or save release**:_ ```git clone -depth=1 https://github.com/peymone/web-chat.git```
 - _**Install dependencies**:_ ```pip install -r requirements.txt```
-- _**Run server**:_ ```python run.py```
+- _**Run server**:_ ```python chat.py```
 - _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/">registration</a>**_
 
 > _Easy right? And no need for docker mambo-jambo_
