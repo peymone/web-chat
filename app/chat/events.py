@@ -1,6 +1,6 @@
 # Third party packages
 from flask_socketio import join_room, leave_room, send, emit
-from flask import session
+from flask import session, request
 
 from datetime import datetime
 
@@ -121,3 +121,41 @@ def handle_message(data):
 
         # Save message to database
         add_message(user_name, room_name, message)
+
+
+
+chats = dict()
+
+@socketio.on('connect')
+def on_connect(auth):
+    sid = request.sid
+    user = auth.get('user')
+    
+    # Log connected message
+    print(f"{user} with {sid} connected")
+    
+    # Emit event on client side for room joining
+    socketio.emit('join-room', to=sid)
+
+@socketio.on('join-room')
+def on_join(user_data: dict):
+    # Save user data by room name
+    user_data['sid'] = request.sid
+    room = user_data.pop('room')
+    
+    # Create room and add user data
+    chats[room] = list()
+    chats[room].append(user_data)    
+
+    # Join the rooom by it's name
+    join_room(room=room)
+    
+    # Send message to the room
+    if user_data in chats[room]:
+        message = user_data['name'] + " has entered the chat"    
+        socketio.send(message, room=room)
+        
+@socketio.on('leave-room')
+def on_leave(user_data: dict):
+    # Check if user in chat dict
+    if chats[]
