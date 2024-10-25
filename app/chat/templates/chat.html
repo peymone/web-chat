@@ -26,11 +26,48 @@
             const CONNECTION_MSG = "CONNECTION_MSG";
 
             // get data from jinja
-            var email = "{{ email }}";
-            var user = "{{ user }}";
-            var room = "{{ room }}";
-            var department = "{{ department }}"
-            var department_role = "{{ department_role }}"
+            const user_data = {
+                email: "{{ email }}",
+                user: "{{ user }}",
+                room: "{{ room }}",
+                department: "{{ department }}",
+                department_role: "{{ department_role }}"
+            }
+
+
+            socket.on('connect', function(){
+                socket.emit('connect', {user: user_data['user']});
+            });
+
+            socket.on('join-room', function(){
+                socket.emit('join-room', user_data);
+            });
+
+            socket.on('receive-historty', function(history){
+
+            });
+
+
+            socket.on('message', function(message){
+                // show message - sysinfo
+            });
+
+            $('#leave-button').on('click', function () {
+                socket.emit('leave-room', {user_data});
+            });
+
+            window.onbeforeunload == function(){
+                socket.emit('leave', {user_data});
+            }
+
+            socket.on('leave-room', function(data){
+                sessionStorage.removeItem("room"); // place it to server side?
+                window.location.href = data.url;
+            });
+
+
+
+
 
             // Listener for enter click
             const input = document.getElementById('msg-input');
@@ -40,6 +77,9 @@
                 button.click(); // Trigger the button click
                 }
             });
+
+
+
 
 
 
