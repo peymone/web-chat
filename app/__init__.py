@@ -1,21 +1,29 @@
 # Third party packages
 from flask import Flask
 from flask_socketio import SocketIO
+from dotenv import load_dotenv
 
+# BuidIn packagess
 from os import getenv
+
+
+# Load variables from env file
+load_dotenv()
 
 # Create SocketIO object for envoking events from client
 socketio = SocketIO()
 
-
-def create_app(debug=False) -> Flask:
+def create_app() -> Flask:
     """Create a Flask application"""
     
     # Get secret key for Flask sessions from env variable
     secter_key = getenv('SECRET')
-    if secter_key is None:
-        secter_key = 'TOP_SECRET12345' # Default value if env is empty
+    debug = False
     
+    if secter_key is None: # Set default value if env is empty
+        secter_key = '1f2c0d02be6d28090d0510b95a9d2661a5516e07a39da8cdb0b9ac9f1877'
+        debug = True
+            
     # Create and configurate Flask application
     app = Flask(__name__)
     app.debug = debug

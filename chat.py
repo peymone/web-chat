@@ -8,7 +8,7 @@ creation_result = create_db()
 print(creation_result[1])
 
 # Create Flask application
-app = create_app(debug=True)
+app = create_app()
 
 if __name__ == '__main__':
     socketio.run(app)
