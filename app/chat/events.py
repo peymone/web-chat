@@ -16,6 +16,11 @@ users_in_room = {chat.name: [] for chat in chats}  # Dict for users saving
 date_time_format = "%I:%M %p %B %d  "  # time format for messages
 
 
+def get_users_amount_per_chat() -> dict:
+    """Get amount of users in each chat"""
+
+    return {chat: len(users) for chat, users in users_in_room.items()}
+
 @socketio.on('join')
 def on_join(data):
     """Event for chat joining"""
