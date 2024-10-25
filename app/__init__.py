@@ -18,9 +18,9 @@ def create_app() -> Flask:
     
     # Get secret key for Flask sessions from env variable
     secter_key = getenv('SECRET')
-    debug = False
+    debug = getenv('DEBUG')
     
-    if secter_key is None: # Set default value if env is empty
+    if secter_key is None or debug is None: # Set default value if env is empty
         secter_key = '1f2c0d02be6d28090d0510b95a9d2661a5516e07a39da8cdb0b9ac9f1877'
         debug = True
             

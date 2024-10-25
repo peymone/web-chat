@@ -1,3 +1,6 @@
+# BuildIn packages
+from os import getenv
+
 # My modules
 from app import create_app, socketio
 from app.database import create_db
@@ -5,10 +8,15 @@ from app.database import create_db
 
 # Create database
 creation_result = create_db()
-print(creation_result[1])
 
 # Create Flask application
 app = create_app()
 
 if __name__ == '__main__':
-    socketio.run(app)
+    host = getenv('HOST')
+    port = getenv('PORT')
+
+    if all((host, port)):
+        socketio.run(host=host, port=port)
+    else:
+        socketio.run(app)
