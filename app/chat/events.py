@@ -75,13 +75,13 @@ def on_leave(data):
         # Send redirect command to client
         emit('leave-redirect', {'url': '/rooms'})
 
-    # Broadcast leave message to chat room
-    send(user_name + ' has leaved the chat', room=room_name)
+        # Broadcast leave message to chat room
+        send(user_name + ' has leaved the chat', room=room_name)
 
 
 @socketio.on('disconnect')
 def on_disconnect():
-    """Del user from chat on disconnect evenv - reload, etc."""
+    """Del user from chat on disconnect event"""
 
     # Get data from client's session
     user_name = session.get('name')
@@ -110,7 +110,7 @@ def handle_message(data):
 
     # handle connection message
     if message == CONNECTION_MSG:
-        print(user_name + " connected")
+        print(user_name + " connected to " + room_name)
         socketio.emit('join_room')
 
     # Handle common messages

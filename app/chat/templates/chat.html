@@ -41,6 +41,8 @@
                 }
             });
 
+
+
             // Get current time
             function getCurrentTimeFormatted() {
                 const now = new Date();
@@ -105,7 +107,6 @@
                     if (message.includes(user)){} // don't show message from user himself
                     else {
                         createReceivedMessage(message, 1);
-                        // $('#received-msg').append($('<p style="margin: 4px; padding: 0%; color:orange;">').text(message));
                         window.scrollTo(0, document.body.scrollHeight);        
                     };
                 };
@@ -191,6 +192,11 @@
                 received_message_container.appendChild(inner_container);
                 document.getElementById('chat').appendChild(received_message_container);
             }
+
+            // Leave chat room when reload page and then send conenct message
+            if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+                socket.emit('disconnect', {});
+                };   
 
         });
 
