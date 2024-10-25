@@ -25,7 +25,9 @@ _P.S. If you find a bag... and you will find it. Know, I don't care_
 <h2>CI/CD</h2>
 
 
-- _**Clone repo or save release**:_ ```git clone -depth=1 https://github.com/peymone/web-chat.git```
+- _**Clone repo or save release manually**:_ ```git clone https://github.com/peymone/web-chat.git```
+- _**Create python virtual environment:**_ ```python -m venv venv```
+- _**Activate virtual environment:**_ ```venv/scripts/activate```
 - _**Install dependencies**:_ ```pip install -r requirements.txt```
 - _**Run server**:_ ```python chat.py```
 - _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/">registration</a>**_
