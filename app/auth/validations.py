@@ -20,6 +20,6 @@ class RegistrationForm(Form):
 class AuthentificationForm(Form):
     """Form for user's authentification"""
 
-    email = EmailField("Company Email", [InputRequired()])
-    password = PasswordField("Password", [InputRequired()])
+    email = EmailField("Company Email", [InputRequired()], render_kw={"placeholder": "Company Email"})
+    password = PasswordField("Password", [InputRequired()], render_kw={"placeholder": "Password"})
     submit = SubmitField("LogIn")
