@@ -16,7 +16,10 @@ if __name__ == '__main__':
     host = getenv('HOST')
     port = getenv('PORT')
 
-    if all((host, port)):
-        socketio.run(host=host, port=port)
+
+    if app.debug == True:
+        socketio.run(app) # localhost:5000
+    elif ([host, port]):
+        socketio.run(app, host=host, port=port)
     else:
-        socketio.run(app)
+        socketio.run(app) # localhost:5000
