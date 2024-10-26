@@ -58,7 +58,7 @@ def rooms():
                 return redirect(url_for('chat.chat'))
             else:
                 flash("Incorrect password for room")
-                return render_template('rooms.html', form=form, rooms=chats, users=room_user_count)
+                return render_template('rooms.html', form=form, rooms=chats, users=room_users)
 
 
 @chat_bp.route('/chat')
