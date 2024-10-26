@@ -1,123 +1,136 @@
 # Third party packages
 from flask_socketio import join_room, leave_room, send, emit
-from flask import session
+from flask import session, request
 
 from datetime import datetime
 
 # My modules
 from .. import socketio
-from ..database import add_message, get_chats, get_messages
+from ..database import add_message, get_messages
 
 
 # Configuration variables
-CONNECTION_MSG = 'CONNECTION_MSG'
-chats = get_chats()  # Get chats from database
-users_in_room = {chat.name: [] for chat in chats}  # Dict for users saving
-date_time_format = "%I:%M %p %B %d  "  # time format for messages
+date_time_format = "%I:%M %p %B %d"
+room_users = dict()
 
+def get_users_amount_by_chat():
+    return {room: len(sids) for room, sids in room_users.items()}
 
-def get_users_amount_per_chat() -> dict:
-    """Get amount of users in each chat"""
+@socketio.on('connect')
+def on_connect():
+    """Create connect log and call join-room event on client"""
+        
+    # Log connect message
+    sid = request.sid
+    user = session.get('name')
+    print(f"{user} connected with sid: '{sid}'")
+    
+    # Call event on client for join room
+    socketio.emit('join-room', to=sid)
 
-    return {chat: len(users) for chat, users in users_in_room.items()}
-
-@socketio.on('join')
-def on_join(data):
-    """Event for chat joining"""
-
-    # Get data from client's session
-    user_name = session.get('name')
-    room_name = session.get('room')
-
-    # Get message history from database by room name
-    messages: tuple = get_messages(chat_name=room_name)
-
-    # Send messages history to client
-    if len(messages):  # No messages in chat
-        if isinstance(messages[0], bool):  # Error occured
-            on_disconnect()
+@socketio.on('join-room')
+def on_join(user_data: dict):
+    """Save user sid in rooms"""
+    
+    # Parse data from client
+    email: str = user_data.get('email')
+    user: str = user_data.get('user')
+    room: str = user_data.get('room')
+    dpeartment: str = user_data.get('department')
+    dpeartment_role: str = user_data.get('department_role')
+    
+    # Join the rooom by it's name and save log
+    join_room(room)
+    print(f"{user} joined room: '{room}'")
+    
+    # Count users in room
+    if room not in room_users:
+        room_users[room] = list()
+        
+    room_users[room].append(request.sid)
+            
+    # Send messages history to new user
+    messages: tuple = get_messages(chat_name=room)
+    
+    if len(messages) > 0: # No history
+        if isinstance(messages[0], bool):
+            print(f"Error while retreiving chat history for chat: '{room}'")
         else:
             for message in messages:
-                if user_name in users_in_room[room_name]:  # User currently in room
-                    pass
-                else:
-                    emit('rcv-history', {
-                        'name': message[0], 'msg': message[1], 'time': message[2].strftime(date_time_format).lstrip('0')})
+                history = {
+                    'name': message[0],
+                    'msg': message[1],
+                    'time': message[2].strftime(date_time_format).lstrip('0')
+                }
+                
+                socketio.emit('receive-history', history, to=request.sid)
+    
+    # Send system message to room
+    socketio.send(user + " has entered the chat", room=room)
 
-    # Join the room
-    join_room(room_name)
-    users_in_room[room_name].append(user_name)
-
-    # For logging
-    print(user_name + ' joined room ' + room_name)
-
-    # Broadcast join message to chat room
-    send(user_name + ' has entered the chat', room=room_name)
-
-
-@socketio.on('leave')
-def on_leave(data):
-    """Event for chat leaving"""
-
-    # Get data from client's session
-    user_name = session.get('name')
-    room_name = session.get('room')
-
-    print(user_name + ' leaved room ' + room_name)  # For logging
-
-    # Check if user currently in room
-    if user_name in users_in_room[room_name]:
-
-        # Remove user from room
-        leave_room(room_name)
-        users_in_room[room_name].remove(user_name)
-
-        # Send redirect command to client
-        emit('leave-redirect', {'url': '/rooms'})
-
-        # Broadcast leave message to chat room
-        send(user_name + ' has leaved the chat', room=room_name)
-
-
+@socketio.on('receive-message')
+def on_message(user_data_and_message):
+    
+    # Parse data from client
+    user_data_and_message = user_data_and_message.get('user_data')
+    email: str = user_data_and_message.get('email')
+    user: str = user_data_and_message.get('user')
+    room: str = user_data_and_message.get('room')
+    dpeartment: str = user_data_and_message.get('department')
+    dpeartment_role: str = user_data_and_message.get('department_role')
+    message: str = user_data_and_message.get('message')
+                                            
+    # Build message
+    now: str = datetime.now().strftime(date_time_format).strip('0')
+    message_data = {'name': user, 'msg': message, 'time': now}
+        
+    # Send message to room and save it to database
+    socketio.emit('receive-message', message_data, to=room)
+    add_message(user, room, message)
+    
+@socketio.on('leave-room')
+def on_leave(user_data: dict):
+    """Event triggered from client on leave-button click"""
+        
+    # Parse data from client
+    user_data = user_data.get('user_data')
+    email: str = user_data.get('email')
+    user: str = user_data.get('user')
+    room: str = user_data.get('room')
+    dpeartment: str = user_data.get('department')
+    dpeartment_role: str = user_data.get('department_role')
+    
+    # Leave room
+    leave_room(room)
+    
+    # Remove sid from room
+    if room in room_users and request.sid in room_users[room]:
+        room_users[room].remove(request.sid)
+        if len(room_users[room]) == 0:
+            del room_users[room]
+        
+    # Call leave-room event on client side - redirect to '/rooms'
+    socketio.emit('leave-room', {'url': '/rooms'}, to=request.sid)
+        
+    # Send system message to room and save log
+    socketio.send(user + " has leaved the chat", room=room)
+    print(f"{user} leaved room: '{room}'")
+        
 @socketio.on('disconnect')
-def on_disconnect():
-    """Del user from chat on disconnect event"""
+def handle_disconnect():
+    """Event triggered on reload, close page.
+    When page is reloaded or closed - 'leave' event isn't triggered.
+    """
+    
+    user = session.get('name')
+    room = session.get('room')
 
-    # Get data from client's session
-    user_name = session.get('name')
-    room_name = session.get('room')
-
-    print(user_name + ' has been disconnected')  # For logging
-
-    # Check if user currently in room
-    if user_name in users_in_room[room_name]:
-
-        # Remove user from room
-        leave_room(room_name)
-        users_in_room[room_name].remove(user_name)
-
-
-@socketio.on('message')
-def handle_message(data):
-    """Receive message from client"""
-
-    # Get data from client's session
-    user_name = session.get('name')
-    room_name = session.get('room')
-
-    # Get message from client
-    message = data.get('msg')
-
-    # handle connection message
-    if message == CONNECTION_MSG:
-        print(user_name + " connected to " + room_name)
-        socketio.emit('join_room')
-
-    # Handle common messages
-    else:
-        now = datetime.now().strftime(date_time_format).strip('0')
-        message_data = {'name': user_name, 'msg': message, 'time': now}
-        emit('recieve-msg', message_data, room=room_name)
-
-        # Save message to database
-        add_message(user_name, room_name, message)
+    # Remove sid from room
+    if room in room_users and request.sid in room_users[room]:
+        room_users[room].remove(request.sid)
+        if len(room_users[room]) == 0:
+            del room_users[room]
+    
+    # Send system message and save log
+    socketio.send(f"{user} has leaved the chat", room=room)
+    print(user + " disconnected")
