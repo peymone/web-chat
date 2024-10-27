@@ -4,63 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('chat.static', filename='css/room.css')}}">
     <title>Rooms</title>
-
-    <style>
-        .form_field {border: 2px solid green; border-radius: 13px; height: 20px;}
-        .form_submit {border: 2px solid green; border-radius: 13px; height: 30px; width: 150px; margin-left: 200px;}
-        .form_submit:hover {color: orange; font-weight:bolder;}
-        .form_errors {margin-left: 30px; color: red; font-weight: bolder; }
-        .flash_errors {color: red; font-weight: bolder; margin-left: 7%; }
-    </style>
-
 </head>
 
-<body style="background-color: #d9b689; font-family: cursive;">
+<body>
 
-    <h1 style="margin: auto; margin-top: 30px; margin-bottom: 20px;  width: 75%; height: 100px; text-align: center; border-radius: 13px; background-color: #ede1d1; 
-    padding-top: 40px; color: #6e6458;">
-        Hello, {{session['name']}}. <br>
-        Welcome, to Real Time Chat application
-    </h1>
-
-    <div style="margin: auto; height:600px; width: 75%; border-radius: 13px; background-color: #ede1d1; color: #6e6458;">
-        <h2 style="position: relative; top: 10%; left: 5%;">Available chat rooms:</h2>
-        <div style="margin: 8% 0% 0% 5%; height: 50%; width: 60%; padding: 10px 0px 0px 20px; border: 3px solid green; border-radius: 13px;  font-size: 20px;">
-            {% for room in rooms %}
-                <p>ID: {{ room.id}}/{{ room.name.upper() }} - {{ room.description.capitalize()}} <span style="display: inline-block; text-indent: 150px;">/ Users in chat: {{users[room.name]}}</span></p>
-            {% endfor %}
-        </div>
-
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div>
-            {% for message in messages %}
-            <p class="flash_errors"> {{ message }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        <form method="POST" style="margin-top: 30px; margin-left: 70px;">
-            {{ form.room.label(class_="form_label") }}: {{ form.room(class_="form_field") }}
-            {% for error in form.room.errors %}
-            <div class="form_errors">{{ error }}</div>
-            {% endfor %}
-
-            {{ form.password.label(class_="form_label") }}: {{ form.password(class_="form_field") }}
-            {% for error in form.password.errors %}
-            <div class="form_errors">{{ error}}</div>
-            {% endfor %}
-
-            {{ form.submit(class="form_submit") }}
-        </form>
-
+    <div id="header">
+            Hello, {{session['name']}}. <span id="welcome-tooltip">Only {{session['department_role']}}? Pfff</span><br>
+            Welcome to the worst app for company communication. 
     </div>
+
+    <div id="room-list">
+        {% for room in rooms %}
+            <p id="room">{{room.id}} /{{ room.name.upper() }} - {{ room.description.capitalize()}}. 
+            <span id="users">Users currently in chat: {{users[room.name]}}</span></p>
+        {% endfor %}
+    </div>
+
+
+
+    <form method="post" id="form">
+
+        <div id="flash-errors">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        {{ form.room(id_="room-field") }}
+        {{ form.password(id_="password-field") }}
+        {{ form.submit(id_="submit") }}
+
+    </form>
+
+    <div id="sign">
+        Application was created special for "DNS" test task<br>
+        by Vladimir Reymer (C)
+    </div>
+
+            
+    {% for error in form.room.errors %}
+    <div class="form_errors">{{ error }}</div>
+    {% endfor %}
+
     
-    <h2 style="text-align: right; margin-right: 17%;  color:#ede1d1;">Made special for DNS test case</h2><br>
-    <h2 style="text-align: right; margin-right: 17%; margin-top: 0px; color:#ede1d1;">by Vladimir Reymer (C)</h2>
+    {% for error in form.password.errors %}
+    <div class="form_errors">{{ error}}</div>
+    {% endfor %}
 
 </body>
-
 </html>

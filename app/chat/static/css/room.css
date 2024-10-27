@@ -1,0 +1,146 @@
+html, body {
+    background-image: url("../images/space.gif");
+    background-size: cover;
+    height: 95%;
+    margin: 0;
+    font-family: cursive;
+    color: #19153a;
+}
+
+#header {
+    background-color: #7c7a63;
+    border-radius: 17px;
+    opacity: 0.7;
+    margin: auto;
+    margin-top: 2%;
+    width: 70%; 
+    height: 10%;
+    font-size: 30px;
+    text-align: center;
+
+}
+
+#header #welcome-tooltip {
+    visibility: hidden;
+}
+
+#header:hover #welcome-tooltip {
+    visibility: visible;
+}
+
+#room-list {
+    background-color: #7c7a63;
+    border-radius: 17px;
+    opacity: 0.7;
+    position: relative;
+    margin: auto;
+    top: 5%;
+    width: 70%;
+    height: 65%;
+    font-size: 25px;
+    overflow: auto;
+}
+
+#room-list::-webkit-scrollbar {display: none;}
+
+#room {
+    margin-top: 15px;
+    margin-left: 30px;
+    padding: 0;
+}
+
+#users {
+    display: inline-block;
+    text-indent: 200px;
+}
+
+#form {
+    position: relative;
+    top: 7%;
+    width: 70%;
+    height: 15%;
+    margin: auto;
+}
+
+#room-field {
+    background-color: #7c7a63;
+    border-radius: 17px;
+    opacity: 0.7;
+    position: relative;
+    width: 30%;
+    height: 40%;
+    text-align: center;
+    font-size: 35px;
+    transition: background-color 0.7s;
+}
+
+#room-field::placeholder {
+    color: #19153a
+}
+
+#room-field:focus{
+    outline: none;
+    background-color: #19153a;
+    color: #7c7a63;
+    
+}
+
+#password-field {
+    background-color: #7c7a63;
+    border-radius: 17px;
+    opacity: 0.7;
+    position: relative;
+    left: 5px;
+    width: 30%;
+    height: 40%;
+    text-align: center;
+    font-size: 35px;
+    transition: background-color 0.7s;
+}
+
+#password-field::placeholder {
+    color: #19153a
+}
+
+#password-field:focus {
+    outline: none;
+    background-color: #19153a;
+    color: #7c7a63;
+}
+
+#submit {
+    background-color: #7c7a63;
+    border-radius: 17px;
+    opacity: 0.7;
+    position: relative;
+    left: 8%;
+    width: 30%;
+    height: 45%;
+    text-align: center;
+    font-size: 35px;
+    color: #19153a;
+    transition: background-color 0.7s;
+}
+
+#submit:hover {
+    background-color: #19153a;
+    color: #7c7a63;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+#flash-errors {
+    position: relative;
+    color: wheat;
+    top: 80%;
+    height: 20%;
+    font-size: 20px;
+}
+
+#sign {
+    position: relative;
+    top: 6%;
+    left: 65%;
+    width: 400px;
+    color: #7c7a63;
+}
