@@ -1,0 +1,53 @@
+html, body {height: 100%; margin: 0;}
+body {background-image: url("../images/LIONESS.gif"); background-size:auto;}
+
+/*  Chat container */
+
+#chat {position: relative; top: 70px; height: 80%; width: 75%; margin: auto; overflow:auto;}
+#chat {border-radius: 30px; background-color: #8a8663; font-family: cursive; opacity: 0.7;}
+#chat::-webkit-scrollbar {display: none;}
+
+/* Receive and Send message containers */
+
+#rcv-msg {height: 60px; width: 50%; margin-top: 20px; margin-left:4%; overflow-wrap:break-word;}
+#rcv-msg {font-size: 20px; color: #1a0d44;}
+
+#snd-msg {height: 60px; width: 50%; margin-top: 20px; margin-left: 45%;  overflow-wrap:break-word;}
+#snd-msg {font-size: 20px; color: #19153a;}
+
+/* Sing tooltip containers inside send|receive messages */
+
+.msg-sign {margin-left: 30px; font-size: 17px; color: #4d492f;}
+.msg-sign .msg-sign-tooltip {visibility: hidden; width: 100px; padding: 5px 8px; text-align: center; opacity: 0;}
+.msg-sign .msg-sign-tooltip {border-radius: 10px; background-color: #25184d; color: #cdc6da; transition: opacity 1s;}
+.msg-sign:hover .msg-sign-tooltip {visibility: visible; opacity: 1;}
+
+/* Input container */
+
+#input {position: relative; top: 90px; left: 35%; height: 80px; width: 52%; opacity: 0.65;}
+
+/* Input field */
+
+#input-msg {position: absolute; height: 43px; width: 57%; padding-left: 30px;}
+#input-msg {background-color: #8a8663; border-radius: 15px; font-family: cursive; font-size: 25px; transition: background-color 0.7s;}
+
+#input-msg:focus { position: absolute;  height: 43px; width: 57%; outline: none; padding-left: 30px; }
+#input-msg:focus { background-color: #19153a; border-radius: 15px; color: whitesmoke; font-family: cursive; font-size: 25px; caret-color: whitesmoke;}
+#input-msg::placeholder {color: #19153a;}
+
+/* Send button */
+
+#input-send {position: absolute; height: 50px; width: 18%; left: 63%; }
+#input-send {background-color: #8a8663; border-radius: 15px; font-family: cursive; font-size: 25px; transition: background-color 0.7s;}
+
+#input-send:hover {position: absolute; height: 50px; width: 18%; left: 63%;}
+#input-send:hover {background-color: #19153a; border-radius: 15px; font-family: cursive; font-size: 25px; font-weight: bolder; color: whitesmoke;}
+
+/* Leave button */
+
+#input-leave {position: absolute; height: 50px; width: 18%; left: 82%;}
+#input-leave {background-color: #8a8663; border-radius: 15px; font-family: cursive; font-size: 25px; transition: background-color 0.7s;}
+
+
+#input-leave:hover {position: absolute; height: 50px; width: 18%; left: 82%;}
+#input-leave:hover {background-color: #19153a; border-radius: 15px; font-family: cursive; font-size: 25px; font-weight: bolder; cursor: pointer; color: whitesmoke;}

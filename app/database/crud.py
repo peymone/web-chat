@@ -114,7 +114,7 @@ def get_messages(chat_name: str, limit:int = None):
                     # Retrieve all messages from specific chat
                     chat_id = chat[0].id
                     history = session.scalars(select(History).where(History.chat_id == chat_id).order_by(History.date))
-                    messages = [(msg.user.full_name, msg.message, msg.date)  for msg in history.all()]
+                    messages = [(msg.user.full_name, msg.user.department, msg.user.department_role, msg.message, msg.date)  for msg in history.all()]
     
                 else: # Return history with limit
                     

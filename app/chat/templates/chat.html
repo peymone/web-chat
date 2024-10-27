@@ -5,24 +5,12 @@
     <title>{{ room }}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('chat.static', filename='css/chat.css')}}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.0/socket.io.min.js"></script>
-    <style>
-        #send {margin: 35% 5% 7% 5%;}
-        #send-button {width: 10%; border: 2px solid green; border-radius: 12px; height: 40px;  font-family: cursive; font-size: 20px; color:grey;}
-        #send-button:hover {width: 10%; border: 4px solid green; border-radius: 12px; height: 40px;  font-family: cursive; font-size: 20px; color:black; font-weight: bolder;}
-        #leave-button {width: 10%; border: 2px solid red; border-radius: 12px; height: 40px;  font-family: cursive; font-size: 20px; color:grey;}
-        #leave-button:hover {width: 10%; border: 4px solid red; border-radius: 12px; height: 40px;  font-family: cursive; font-size: 20px; color:black; font-weight: bolder;}
-        #msg-input {margin-left: 35%; width:43%; border: 3px solid grey; border-radius: 12px; height: 40px;  font-family: cursive; font-size: 20px; background-color: #ede1d1;}
-        #msg-receive {color: white}
-        #msg-sended {color:black}
-        #msg-sign {color: grey;}
-        #msg-sys {color: red;}
-        #msg-sign-sys {color: purple;}
-    </style>
 </head>
 
-<body style="background-color: #d9b689; font-family: cursive;">
+<body>
     <script>
         $(document).ready(function () {
 
@@ -35,10 +23,11 @@
                 department_role: "{{ department_role }}"
             };
 
-            // Get buttons and input field
-            const input = document.getElementById('msg-input');
-            const send_button = document.getElementById('send-button');
-            const leave_button = document.getElementById('leave-button');
+            // Get buttons and input fields
+            const chat = document.getElementById('chat');
+            const input = document.getElementById('input-msg');
+            const send_button = document.getElementById('input-send');
+            const leave_button = document.getElementById('input-leave');
 
             // Create socket object and connect to the server
             const socket = io.connect('http://' + document.domain + ':' + location.port, {});
@@ -57,64 +46,21 @@
                 const dateString = now.toLocaleString('en-US', dateOptions);
 
                 return `${timeString} ${dateString}`;
-            }
-
-            function createSendedMessage(message){
-                // Create sended message to show
-
-                // Create container for message
-                let sended_message_container = document.createElement("div");
-                sended_message_container.setAttribute('class', 'sended-msg');
-                sended_message_container.setAttribute('id', 'sended-msg');
-                sended_message_container.style.marginTop = "1%";
-                sended_message_container.style.marginLeft = "40%";
-                sended_message_container.style.padding = "1%";
-                sended_message_container.style.fontSize = "20px";
-                sended_message_container.style.color = "grey";
-                // sended_message_container.style.border = "1px solid black";
-                
-                // Create inner container
-                let inner_container = document.createElement("p");
-                inner_container.id = "msg-sended";
-                inner_container.style.margin = "4px";
-                inner_container.style.padding = "0%";
-                inner_container.innerHTML = message;
-                
-                // Build root container and add to chat
-                sended_message_container.appendChild(inner_container);
-                document.getElementById('chat').appendChild(sended_message_container);
             };
 
-            function createReceivedMessage(message, sys=null){
-                // Create received message to show
+            function createMessage(message, mode){
+                // Create message to show
 
-                // Create container for message
-                let received_message_container = document.createElement("div");
-                received_message_container.setAttribute('class', 'received-msg');
-                received_message_container.setAttribute('id', 'received-msg');
-                received_message_container.style.marginTop = "1%";
-                received_message_container.style.marginRight = "40%";
-                received_message_container.style.padding = "1%";
-                received_message_container.style.fontSize = "20px";
-                received_message_container.style.color = "black";
-                // received_message_container.style.border = "1px solid blue";
-
-                // Create inner container
-                let inner_container = document.createElement("p");
-                if (sys === null){
-                    inner_container.id = "msg-receive";
+                let msg_container = document.createElement("div");
+                if (mode === 'snd'){
+                    msg_container.setAttribute('id', 'snd-msg')
                 }
-                else {
-                    inner_container.id = "msg-sys";
-                };
+                else if (mode == 'rcv'){
+                    msg_container.setAttribute('id', 'rcv-msg')
+                }
 
-                inner_container.style.margin = "4px";
-                inner_container.style.padding = "0%";
-                inner_container.innerHTML = message;
-
-                // Add inner container with message to root container
-                received_message_container.appendChild(inner_container);
-                document.getElementById('chat').appendChild(received_message_container);
+                msg_container.innerHTML = message;
+                document.getElementById('chat').appendChild(msg_container);
             };
 
             // SocketIO Events
@@ -127,68 +73,70 @@
             socket.on('receive-history', function(history){
                 // Receive and show message history from chat room
                 
-                // Build message html
-                let message = history.msg + "<br>" + "<span id='msg-sign'>" + history.time + " " + history.name + "</span>";
+                // Build message
+                let sign = '<span class="msg-sign-tooltip">' + history.department + ", " + history.department_role + "</span>"
+                let message = history.msg + "<br>" + "<span class='msg-sign'>" + history.time + ", " + history.name + sign + "</span>";
 
                 // Add message to container - sended or received
                 if (history.name == user_data['user']) {
-                    createSendedMessage(message);
+                    createMessage(message, 'snd');
                 }
                 else {
-                    createReceivedMessage(message);
+                    createMessage(message, 'rcv');
                 };
 
                 // Scroll cursor down the windows
-                window.scrollTo(0, document.body.scrollHeight);
-                
+                chat.scrollTop = chat.scrollHeight;
             });
 
             socket.on('message', function(message){
                 // receive system message from server
 
-                // Build message html
+                // Build message
                 let now = getCurrentTimeFormatted();
-                sys_message = message + "<br>" + "<span id='msg-sign-sys'>" + now + " System" + "</span>"
+                let sign = "<span class='msg-sign-tooltip'>" + "Development, Chat itself" + "</span>"
+                let sys_message = message + "<br>" + "<span class='msg-sign'>" + now + ", " + "System" + sign + "</span>";
 
                 // Show message
-                createReceivedMessage(sys_message, 1);
+                createMessage(sys_message, 'rcv');
 
                 // Scroll cursor down the windows
-                window.scrollTo(0, document.body.scrollHeight);       
+                chat.scrollTop = chat.scrollHeight;
             });
 
             socket.on('receive-message', function(msg_data){
                 // Receive message from server and show it
 
                 // Build message
-                let message = msg_data.msg + "<br>" + "<span id='msg-sign'>" + msg_data.time + " " + msg_data.name + "</span>";
+                let sign = "<span class='msg-sign-tooltip'>" + msg_data.department + ", " + msg_data.department_role + "</span>"
+                let message = msg_data.msg + "<br>" + "<span class='msg-sign'>" + msg_data.time + ", " + msg_data.name + sign + "</span>";
 
                 // Show message
                 if (user_data.user == msg_data.name){
-                    createSendedMessage(message);
+                    createMessage(message, 'snd');
                 }
                 else {
-                    createReceivedMessage(message);
+                    createMessage(message, 'rcv');
                 }
 
                 // Scroll cursor down the window
-                window.scrollTo(0, document.body.scrollHeight);
+                chat.scrollTop = chat.scrollHeight;
             });
 
             $(send_button).on('click', function () {
                 // Send message to server by clicking send button
     
                 // Get message from field and build message
-                var message = $('#msg-input').val();
+                var message = $(input).val();
                 if (message.length > 0){
                     user_data['message'] = message;
 
-                    // Send message and dele it from user data
+                    // Send message and delet it from user data
                     socket.emit('receive-message', {user_data});
                     delete user_data.message;
 
                     // Clear input field
-                    $('#msg-input').val(''); 
+                    $(input).val(''); 
                 };
             });
         
@@ -216,13 +164,34 @@
         
     </script>
 
-    <div id="chat" class="chat" style="margin: 5% 5% 0% 5%;">
-        <!-- Put your messages here -->
+    <div id="chat">
+
+        <div id="rcv-msg">
+            Hello, I'm a received message<br>
+            <span class="msg-sign">
+                14:15 PM Jul 1, Vladimir Reymer
+                <span class="msg-sign-tooltip">
+                    Developer, Back-End
+                </span>
+            </span>
+        </div>
+
+        <div id="snd-msg">
+            Hello, I'm a sended message<br>
+            <span class="msg-sign">
+                14:18 PM Jul 1, Sergey Yurev
+                <span class="msg-sign-tooltip">
+                    Developer, Front-End
+                </span>
+            </span>
+        </div>
+
     </div>
-    <div id="send" class="send">
-        <input type="text" name="msg-input" id="msg-input" placeholder="Type you message here..." >
-        <button id="send-button">Send</button>
-        <button id="leave-button" style=>Leave</button>
+
+    <div id="input">
+        <input id="input-msg" type="text"  placeholder="Enter your message here..."></input>
+        <button id="input-send">Send</button>
+        <button id="input-leave">Leave</button>
     </div>
 
 </body>

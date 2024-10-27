@@ -8,8 +8,27 @@ from ..database import get_chats
 from .events import get_users_amount_by_chat
 
 
+@chat_bp.route('/chat')
+@chat_bp.route('/')
+def chat():
+    """Chat for specific room"""
+
+    # Get data from session
+    email = session.get('email', '')
+    user = session.get('name', '')
+    room = session.get('room', '')
+    department = session.get('department', '')
+    department_role = session.get('department_role', '')
+
+    # User not authorized and not picked room
+    if user == '' or room == '':
+        return redirect(url_for('chat.rooms'))
+    else:        
+        # return render_template('chat.html', room=room, email=email, user=user, department=department, department_role=department_role)
+        return render_template('chat.html', room=room, email=email, user=user, department=department, department_role=department_role)
+
+
 @chat_bp.route('/rooms', methods=['GET', 'POST'])
-@chat_bp.route('/', methods=['GET', 'POST'])
 def rooms():
     """Room list and description, input chat form"""
 
@@ -59,22 +78,3 @@ def rooms():
             else:
                 flash("Incorrect password for room")
                 return render_template('rooms.html', form=form, rooms=chats, users=room_users)
-
-
-@chat_bp.route('/chat')
-def chat():
-    """Chat for specific room"""
-
-    # Get data from session
-    email = session.get('email', '')
-    user = session.get('name', '')
-    room = session.get('room', '')
-    department = session.get('department', '')
-    department_role = session.get('department_role', '')
-
-    # User not authorized and not picked room
-    if user == '' or room == '':
-        return redirect(url_for('chat.rooms'))
-    else:        
-        # return render_template('chat.html', room=room, email=email, user=user, department=department, department_role=department_role)
-        return render_template('chat.html', room=room, email=email, user=user, department=department, department_role=department_role)

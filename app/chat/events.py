@@ -59,8 +59,10 @@ def on_join(user_data: dict):
             for message in messages:
                 history = {
                     'name': message[0],
-                    'msg': message[1],
-                    'time': message[2].strftime(date_time_format).lstrip('0')
+                    'department': message[1],
+                    'department_role': message[2],
+                    'msg': message[3],
+                    'time': message[4].strftime(date_time_format).lstrip('0')
                 }
                 
                 socketio.emit('receive-history', history, to=request.sid)
@@ -76,13 +78,13 @@ def on_message(user_data_and_message):
     email: str = user_data_and_message.get('email')
     user: str = user_data_and_message.get('user')
     room: str = user_data_and_message.get('room')
-    dpeartment: str = user_data_and_message.get('department')
-    dpeartment_role: str = user_data_and_message.get('department_role')
+    department: str = user_data_and_message.get('department')
+    department_role: str = user_data_and_message.get('department_role')
     message: str = user_data_and_message.get('message')
                                             
     # Build message
     now: str = datetime.now().strftime(date_time_format).strip('0')
-    message_data = {'name': user, 'msg': message, 'time': now}
+    message_data = {'name': user, 'department': department, 'department_role': department_role, 'msg': message, 'time': now}
         
     # Send message to room and save it to database
     socketio.emit('receive-message', message_data, to=room)
@@ -110,7 +112,7 @@ def on_leave(user_data: dict):
             del room_users[room]
         
     # Call leave-room event on client side - redirect to '/rooms'
-    socketio.emit('leave-room', {'url': '/rooms'}, to=request.sid)
+    socketio.emit('leave-room', {'url': '/chat/rooms'}, to=request.sid)
         
     # Send system message to room and save log
     socketio.send(user + " has leaved the chat", room=room)
@@ -132,5 +134,5 @@ def handle_disconnect():
             del room_users[room]
     
     # Send system message and save log
-    socketio.send(f"{user} has leaved the chat", room=room)
+    socketio.send(f"{user} has been disconnected", room=room)
     print(user + " disconnected")

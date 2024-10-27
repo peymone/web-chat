@@ -36,7 +36,7 @@ def create_app() -> Flask:
     from .auth import auth_bp
     from .chat import chat_bp
     app.register_blueprint(auth_bp)
-    app.register_blueprint(chat_bp)
+    app.register_blueprint(chat_bp, url_prefix='/chat')
 
     # Add Flask application to SocketIO object
     socketio.init_app(app)
