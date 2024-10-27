@@ -20,7 +20,7 @@ _**Real time chat application with websockets usage. Websocket communication imp
 
 _**Also, I want to thanks FrontEnd Developers for this div positioning shit. Thank you all, bye everyone. Let's go roll out the app.**_
 
-_P.S. If you find a bag... and you will find it. Know, I don't care_
+_P.S. If you find a bag... and you will find it. Know, I don't care._
 
 <h2>CI/CD</h2>
 
@@ -29,7 +29,10 @@ _P.S. If you find a bag... and you will find it. Know, I don't care_
 - _**Create python virtual environment:**_ ```python -m venv venv```
 - _**Activate virtual environment:**_ ```venv/scripts/activate```
 - _**Install dependencies**:_ ```pip install -r requirements.txt```
+- _**Add room chats in db manually (maybe later I'll add admin panel):**_ ```app/database/chat.dp/chats```
 - _**Run server**:_ ```python chat.py```
-- _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/">registration</a>**_
+- _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/reg">registration</a>**_
+
+> _Oh. almost forgot. You also can change some settings in ```app/.env``` file_
 
 > _Easy right? And no need for docker mambo-jambo_
