@@ -7,6 +7,6 @@ from wtforms.validators import InputRequired, Optional
 class RoomForm(Form):
     """Accepts a room id and a password"""
 
-    room = IntegerField('Room ID', [InputRequired()])
-    password = PasswordField('Password', [Optional()])
+    room = IntegerField('Room ID', [InputRequired()], render_kw={"placeholder": "Room ID"})
+    password = PasswordField('Password', [Optional()], render_kw={"placeholder": "Password (Optional)"})
     submit = SubmitField('EnterRoom')
