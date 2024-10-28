@@ -29,10 +29,10 @@ _P.S. If you find a bag... and you will find it. Know, I don't care._
 - _**Create python virtual environment:**_ ```python -m venv venv```
 - _**Activate virtual environment:**_ ```venv/scripts/activate```
 - _**Install dependencies**:_ ```pip install -r requirements.txt```
-- _**Add room chats in db manually (maybe later I'll add admin panel):**_ ```app/database/chat.dp/chats```
+- _**Add new chat room in database by command:**_ ```python -c 1```
 - _**Run server**:_ ```python chat.py```
 - _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/auth/reg">registration</a>**_
 
-> _Oh. almost forgot. You also can change some settings in ```app/.env``` file_
+_You also can change some settings in ```app/.env``` or check available cli commands with ```python chat.py -h```_
 
 > _Easy right? And no need for docker mambo-jambo_
