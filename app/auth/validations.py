@@ -7,13 +7,13 @@ from wtforms.validators import InputRequired, Length, Optional, EqualTo
 class RegistrationForm(Form):
     """Form for user's registration"""
 
-    email = EmailField("Company Email", [InputRequired()], render_kw={"placeholder": "Company Email"})
+    email = EmailField("Email", [InputRequired()], render_kw={"placeholder": "Company Email"})
     password = PasswordField("Password", [InputRequired(), Length(min=5), EqualTo('confirm', message="passwords must be equal")],
                              render_kw={"placeholder": "Password"})
-    confirm = PasswordField("Confirm Password", render_kw={"placeholder": "Repeat Password"})
-    full_name = StringField("Full Name", [InputRequired(), Length(min=5)], render_kw={"placeholder": "Full Name"})
-    department = StringField("Company Department", [Optional()], default=None, render_kw={"placeholder": "Department (optional)"})
-    department_role = StringField("Department Role", [Optional()], default=None, render_kw={"placeholder": "Department Role (optional)"})
+    confirm = PasswordField("Repeat", render_kw={"placeholder": "Repeat Password"})
+    full_name = StringField("Name", [InputRequired(), Length(min=5)], render_kw={"placeholder": "Full Name"})
+    department = StringField("Company Department", [Optional()], default=None, render_kw={"placeholder": "Optional"})
+    department_role = StringField("Department Role", [Optional()], default=None, render_kw={"placeholder": "Optional"})
     submit = SubmitField("Register")
 
 

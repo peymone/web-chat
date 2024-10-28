@@ -1,5 +1,6 @@
 # Third party packages
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 
 # My modules
 from .db import Session
@@ -20,7 +21,11 @@ def add_user(email: str, hashed_password: str, full_name: str, department: str, 
             session.commit()
             return True, "New user successfully added to database"
 
-        except Exception:
+        except IntegrityError as error:
+            session.rollback()
+            return False, "User already in database"
+
+        except Exception as error:
             session.rollback()
             return False, "Transaction error while adding new user to database"
 

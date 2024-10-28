@@ -4,97 +4,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('auth.static', filename='css/reg.css')}}">
     <title>Register</title>
-    <style>
-        .email_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-
-        .name_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-        .password_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-        .confirm_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}        
-
-        .department_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-
-        .department_role_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-        .submit_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-        .submit_form:hover {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid orange; font-weight: bold;   border-radius: 13px; background-color: #ede1d1;}
-
-        #switch:hover {color:orange;}
-
-        .flash_errors {position: absolute; top: 5%; left: 35%; height: 30px; width: 30%; text-align: center; font-size: 20px; color: red;}
-
-    </style>
 </head>
 
-<body style="background-color: #d9b689; font-family: cursive;">
+<body>
+    <div id="reg">
+        <h1 id="header">Registration</h1>
+        <p id="login">
+            Already have an account? <a id="reg-link" href="{{url_for('auth.login')}}">Log In here<a>
+        </p>
 
-    <h1 style="text-align: center; margin-top: 2%; color: #6e6458;">Registration Form</h1>
-    <p id="switch" style="margin-left: 65%;"><a href="{{url_for('auth.login')}}" >Already have an account? Login here</a></p>
-    <div class=outer-container style="position: relative; top:50px; margin: auto; height:600px; width: 60%;  border: 3px solid #6e6458; border-radius: 13px;">
-    <form method="POST">
-    
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="flash_errors"> {{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
 
-        <div class="email" style="position: absolute; top: 15%; left: 10%; height: 60px;  width: 30%;">
-            {% for error in form.email.errors %}
-            {{ error }}
-            {% endfor %}
-            {{ form.email(class_="email_form") }} 
+        <div id="flash-errors">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
         </div>
-        <div class="name" style="position: absolute; top: 15%; right: 10%; height: 60px; width: 30%;">
-            {% for error in form.full_name.errors %}
-            {{ error }}
-            {% endfor%}
-            {{ form.full_name(class_="name_form") }}
-        </div>
-        <div class="password" style="position: absolute; top: 35%; left: 10%; height: 60px; width: 30%;">
-            {% for error in form.password.errors %}
-            {{ error }}
-            {% endfor %}
-            {{ form.password(class_="password_form") }}
-        </div>
-        <div class="confirm" style="position: absolute; top: 35%; right: 10%; height: 60px; width: 30%;">
-            {% for error in form.confirm.errors %}
-            {{ error }}
-            {% endfor %}
-            {{ form.confirm(class_="confirm_form") }}
-        </div>
-        <div class="department" style="position: absolute; top: 55%; right: 10%; height: 60px; width: 30%;">
-            {% for error in form.department.errors %}
-            {{ error }}
-            {%endfor%}
-            {{ form.department(class_="department_form") }}
-        </div>
-        <div class="department_role" style="position: absolute; top: 55%; left: 10%; height: 60px; width: 30%;">
-            {% for error in form.department_role.errors %}
-            {{error }}
-            {% endfor %}
-            {{ form.department_role(class_="department_role_form") }}
-        </div>
-        <div class="submit" style="position: absolute; top: 75%; left: 35%; right: 30%;  height: 60px; width: 30%;">
-            {{ form.submit(class_="submit_form") }}
-        </div>
+        <form method="post">
 
-    </form>
+            <!-- Email -->
+
+            <div id="email-erros">    
+                {% for error in form.email.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+
+            {{ form.email.label(id_="email-label") }}
+            {{ form.email(id_="email-field") }}
+
+            <!-- Name -->
+            <div id="name-erros">    
+                {% for error in form.full_name.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+
+            {{ form.full_name.label(id_="name-label") }}
+            {{ form.full_name(id_="name-field") }}
+
+            <!-- Password -->
+
+            <div class="password-errors">
+                {% for error in form.password.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+
+            {{ form.password.label(id_="password-label") }}
+            {{ form.password(id_="password-field") }}
+
+            <!-- Confirm password -->
+
+            <div class="password-errors">
+                {% for error in form.confirm.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+
+            {{ form.confirm.label(id_="confirm-label") }}
+            {{ form.confirm(id_="confirm-field") }}
+
+            <!-- Department -->
+
+            <div id="department-errors">
+                {% for error in form.department.errors %}
+                    {{ error }}
+                {%endfor%}
+            </div>
+
+            {{ form.department.label(id_="department-label") }}
+            {{ form.department(id_="department-field") }}
+
+            <!-- Department role -->
+
+            <div id="department-role-errors">
+                {% for error in form.department_role.errors %}
+                    {{ error }}
+                {%endfor%}
+            </div>
+
+            {{ form.department_role.label(id_="department_role-label") }}
+            {{ form.department_role(id_="department_role-field") }}
+
+            <!-- Submit -->
+
+            {{ form.submit(id_="submit-field") }}
+
+        </form>
     </div>
 
 </body>
