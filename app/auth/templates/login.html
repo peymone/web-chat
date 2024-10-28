@@ -1,65 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('auth.static', filename='css/login.css')}}">
     <title>Login</title>
-    <style>
-        .email_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-            border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-        
-        .password_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-            border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-        .submit_form {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-            border: 3px solid green; border-radius: 13px; background-color: #ede1d1;}
-
-        .submit_form:hover {position: absolute; width: 100%; height: 100%; font-family: cursive; color: #6e6458;  text-align: center; font-size: 20px; 
-                        border: 3px solid orange; font-weight: bold;   border-radius: 13px; background-color: #ede1d1;}
-
-        #switch:hover {color:orange;}
-
-        .flash_errors {position: absolute; top: 5%; left: 35%; height: 30px; width: 30%; text-align: center; font-size: 20px; color: red;}
-    </style>
 </head>
+<body>
+    
+    <div id="login">
 
-<body style="background-color: #d9b689; font-family: cursive;">
-
-    <h1 style="text-align: center; margin-top: 2%; color: #6e6458;">Login Form</h1>
-    <p id="switch" style="margin-left: 63%;"><a href="{{url_for('auth.register')}}" >Don't have an account? Register here</a></p>
-    <div class=outer-container style="position: relative; top:50px; margin: auto; height:500px; width: 60%;  border: 3px solid #6e6458; border-radius: 13px;">
-    <form method="POST">
-        
+        <h1 id="header">Enter your login credentials</h1>
+        <div id="flash-errors">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                    <div class="flash_errors"> {{ message }}</div>
+                    {{ message }}
                 {% endfor %}
             {% endif %}
             {% endwith %}
-        
-        <div class="email" style="position: absolute; top: 15%; left: 10%; height: 60px;  width: 30%;">
-            {% for error in form.email.errors %}
-                {{ error }}
-            {% endfor %}
-            {{ form.email(class_="email_form") }} 
-        </div>    
-        <div class="password" style="position: absolute; top: 15%; right: 10%; height: 60px; width: 30%;">
-            {% for error in form.password.errors %}
-                {{ error }}
-            {% endfor %}
-            {{ form.password(class_="password_form") }}
         </div>
-        <div class="submit" style="position: absolute; top: 40%; left: 35%; right: 30%;  height: 60px; width: 30%;">
-            {{ form.submit(class_="submit_form") }}
-        </div>
+        <form method="post">
 
-        <p style="position: absolute; bottom: 20%; right: 10%;  color: #6e6458;">P.S. I know, design in this project is suck.</p>
+            <div id="email-erros">    
+                {% for error in form.email.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
 
-    </form>
+            {{ form.email.label(id_="email-label") }}
+            {{ form.email(id_="email-field") }}
+
+            <div id="password-errors">
+                {% for error in form.password.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+
+            {{ form.password.label(id_="password-label") }}
+            {{ form.password(id_="password-field") }}
+
+            {{ form.submit(id_="submit-field") }}
+
+        </form>
+
+        <p id="reg">
+            Don't have an account? <a id="reg-link" href="{{url_for('auth.register')}}">Register here<a>
+        </p>
+
     </div>
 
 </body>
-
 </html>
