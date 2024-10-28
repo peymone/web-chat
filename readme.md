@@ -31,7 +31,7 @@ _P.S. If you find a bag... and you will find it. Know, I don't care._
 - _**Install dependencies**:_ ```pip install -r requirements.txt```
 - _**Add room chats in db manually (maybe later I'll add admin panel):**_ ```app/database/chat.dp/chats```
 - _**Run server**:_ ```python chat.py```
-- _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/reg">registration</a>**_
+- _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/auth/reg">registration</a>**_
 
 > _Oh. almost forgot. You also can change some settings in ```app/.env``` file_
 
