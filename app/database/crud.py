@@ -30,11 +30,11 @@ def add_user(email: str, hashed_password: str, full_name: str, department: str, 
             return False, "Transaction error while adding new user to database"
 
 
-def add_chat(name: str, description: str):
-    """Add new chat room to database"""
+def add_chat(name: str, description: str, password: str = None):
+    """Add new chat room to database""" 
 
     # Create chat object
-    new_chat = Chat(name=name, description=description)
+    new_chat = Chat(name=name, description=description, password=password)
 
     # Add chat to database
     with Session() as session:
@@ -42,6 +42,10 @@ def add_chat(name: str, description: str):
             session.add(new_chat)
             session.commit()
             return True, "New chat successfully added to database"
+
+        except IntegrityError:
+            session.rollback()
+            return False, f"Chat '{name}' already exist"
 
         except Exception:
             session.rollback()
