@@ -15,8 +15,8 @@ args = parser.parse_args()
 args_set = set([args.start, args.chat])
 
 # Create database
-creation_result = create_db()
-print("Database creation result: ", creation_result[1])
+# creation_result = create_db()
+# print("Database creation result: ", creation_result[1])
 
 # Start application
 if args.start or (len(args_set) == 1 and None in args_set):

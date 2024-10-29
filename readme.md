@@ -29,6 +29,7 @@ _P.S. If you find a bag... and you will find it. Know, I don't care._
 - _**Create python virtual environment:**_ ```python -m venv venv```
 - _**Activate virtual environment:**_ ```venv/scripts/activate```
 - _**Install dependencies**:_ ```pip install -r requirements.txt```
+- _**Create database with alembic:**_ ```alembic upgrade head```
 - _**Add new chat room in database by command:**_ ```python -c 1```
 - _**Run server**:_ ```python chat.py```
 - _**Go, pass registration and let's chatting: <a href="http://127.0.0.1:5000/auth/reg">registration</a>**_
