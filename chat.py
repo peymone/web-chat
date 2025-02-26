@@ -18,6 +18,9 @@ args_set = set([args.start, args.chat])
 creation_result = create_db()
 print("Database creation result: ", creation_result[1])
 
+# Create default chat room
+add_chat(name="common", description="everybody here")
+
 # Start application
 if args.start or (len(args_set) == 1 and None in args_set):
 
@@ -32,7 +35,7 @@ if args.start or (len(args_set) == 1 and None in args_set):
     if app.debug == True:
         socketio.run(app) # localhost:5000
     elif ([host, port]):
-        socketio.run(app, host=host, port=port) # Specified in '.env'
+        socketio.run(app, host=host, port=port, allow_unsafe_werkzeug=True) # Specified in '.env'
     else:
         socketio.run(app) # localhost:5000
 
